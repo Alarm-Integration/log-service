@@ -20,7 +20,6 @@ import java.util.Map;
 public class ControllerExceptionHandler {
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<APIResponse> missingRequestHeaderExceptionHandler(MissingRequestHeaderException e){
         Map<String, String> errorBody = new HashMap<>();
         errorBody.put("required_header_name", e.getHeaderName());
@@ -31,7 +30,6 @@ public class ControllerExceptionHandler {
                 .body(APIResponse.withMessage("MissingRequestHeaderException", errorBody));
     }
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<APIResponse> MethodArgumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException e){
         Map<String, String> errorBody = new HashMap<>();
         errorBody.put("type_mismatched_header_name", e.getName());

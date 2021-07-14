@@ -31,4 +31,14 @@ public class LogEntity {
     @Column(nullable = false, name = "created_at")
     private LocalDateTime createdAt;
 
+    @Builder
+    public LogEntity(Long id, Long userId, String traceId, String appName, String resultMsg, LocalDateTime createdAt) {
+        this.id = id;
+        this.userId = userId;
+        this.traceId = traceId;
+        this.appName = appName;
+        this.resultMsg = resultMsg;
+        this.createdAt = createdAt;
+    }
+
 }
