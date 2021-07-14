@@ -31,11 +31,4 @@ public class LogEntity {
     @Column(nullable = false, name = "created_at")
     private LocalDateTime createdAt;
 
-//    @Builder
-//    public LogEntity(String title, String content, String author) {
-//        this.title = title;
-//        this.content = content;
-//        this.author = author;
-//    }
-
 }
