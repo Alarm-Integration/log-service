@@ -1,0 +1,6 @@
+spring:
+  cloud:
+    config:
+#      uri: "${CONFIG_SERVER_URL}"
+      uri: http://10.7.27.18:8888/
+      name: log-service
