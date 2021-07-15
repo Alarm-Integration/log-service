@@ -30,6 +30,7 @@ public class LogServiceTest {
         //given
         Long userId = 1L;
         String traceId = "test_trace_id";
+        List<LogEntity> expectedLogEntityList = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
             LogEntity logEntity = LogEntity.builder()
@@ -40,39 +41,27 @@ public class LogServiceTest {
                     .createdAt(LocalDateTime.now())
                     .build();
             em.persist(logEntity);
+            expectedLogEntityList.add(logEntity);
         }
 
-        LogEntity logEntity = LogEntity.builder()
+        LogEntity differentLogEntity = LogEntity.builder()
                 .userId(2L)  // not same with above userId
                 .traceId(traceId)  // same with above traceId
                 .resultMsg("test_result_msg")
                 .appName("test_app_name")
                 .createdAt(LocalDateTime.now())
                 .build();
-        em.persist(logEntity);
+        em.persist(differentLogEntity);
         em.flush();
         em.clear();
 
-        List<AlarmResultResponse> expectedAlarmResultResponseList = new ArrayList<>();
-        for (int i = 1; i < 5; i++) {
-            expectedAlarmResultResponseList.add(new AlarmResultResponse(em.find(LogEntity.class, (long) i)));
-        }
-
         //when
-        List<AlarmResultResponse> actualAlarmResultResponseList = logService.getAlarmResultList(userId, traceId);
+        List<LogEntity> actualLogEntityList = logService.getAlarmResultList(userId, traceId);
 
         //then
-        assertThat(actualAlarmResultResponseList.size()).isLessThan(expectedAlarmResultResponseList.size());
-        assertThat(actualAlarmResultResponseList).doesNotContain(expectedAlarmResultResponseList.get(3));
-
-        for (int i = 0; i < 3; i++) {
-            AlarmResultResponse expectedAlarmResultResponse = expectedAlarmResultResponseList.get(i);
-            AlarmResultResponse actualAlarmResultResponse = actualAlarmResultResponseList.get(i);
-
-            assertThat(actualAlarmResultResponse.getAppName()).isEqualTo(expectedAlarmResultResponse.getAppName());
-            assertThat(actualAlarmResultResponse.getResultMsg()).isEqualTo(expectedAlarmResultResponse.getResultMsg());
-            assertThat(actualAlarmResultResponse.getCreatedAt()).isEqualTo(expectedAlarmResultResponse.getCreatedAt());
-        }
+        assertThat(actualLogEntityList.size()).isEqualTo(expectedLogEntityList.size());
+        assertThat(actualLogEntityList).containsAll(expectedLogEntityList);
+        assertThat(actualLogEntityList).doesNotContain(differentLogEntity);
     }
 
 }

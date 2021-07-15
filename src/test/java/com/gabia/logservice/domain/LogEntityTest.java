@@ -3,6 +3,8 @@ package com.gabia.logservice.domain;
 import com.gabia.logservice.domain.log.LogEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
+@SpringBootTest
 public class LogEntityTest {
 
 
@@ -17,7 +21,7 @@ public class LogEntityTest {
     private EntityManager em;
 
     @Test
-    void test_log_entity_getter_method() {
+    void test_getter_method() {
         // given
         Long id = 1L;
         Long userId = 1L;
@@ -48,27 +52,31 @@ public class LogEntityTest {
     @Test
     void test_persist_data() {
         // given
-        LogEntity expectedLogEntity = LogEntity.builder()
-                .id(1L)
+        LogEntity expectedExistingLogEntity = LogEntity.builder()
                 .userId(1L)
                 .traceId("test_trace_id")
                 .appName("test_app_name")
                 .resultMsg("test_result_msg")
                 .createdAt(LocalDateTime.now())
                 .build();
+        LogEntity expectedNotExistingLogEntity = LogEntity.builder()
+                .id(2L)
+                .userId(2L)
+                .traceId("test_trace_id2")
+                .appName("test_app_name2")
+                .resultMsg("test_result_msg2")
+                .createdAt(LocalDateTime.now())
+                .build();
 
         // when
-        em.persist(expectedLogEntity);
+        em.persist(expectedExistingLogEntity);
         em.flush();
         em.clear();
-        LogEntity actualLogEntity = em.find(LogEntity.class, expectedLogEntity.getId());
+        LogEntity actualExistingLogEntity = em.find(LogEntity.class, expectedExistingLogEntity.getId());
+        LogEntity actualNotExistingLogEntity = em.find(LogEntity.class, 2L);
 
         // then
-        assertThat(actualLogEntity.getId()).isEqualTo(expectedLogEntity.getId());
-        assertThat(actualLogEntity.getUserId()).isEqualTo(expectedLogEntity.getUserId());
-        assertThat(actualLogEntity.getTraceId()).isEqualTo(expectedLogEntity.getTraceId());
-        assertThat(actualLogEntity.getAppName()).isEqualTo(expectedLogEntity.getAppName());
-        assertThat(actualLogEntity.getResultMsg()).isEqualTo(expectedLogEntity.getResultMsg());
-        assertThat(actualLogEntity.getCreatedAt()).isEqualTo(expectedLogEntity.getCreatedAt());
+        assertThat(actualExistingLogEntity).isEqualTo(expectedExistingLogEntity);
+        assertThat(actualNotExistingLogEntity).isNull();
     }
 }

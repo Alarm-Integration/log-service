@@ -56,7 +56,7 @@ public class LogRepositoryTest {
                     .createdAt(createdAt)
                     .build();
             em.persist(logEntity);
-            expectedLogEntityList.add(em.find(LogEntity.class, logEntity.getId()));
+            expectedLogEntityList.add(logEntity);
         }
 
         LogEntity differentLogEntity = LogEntity.builder()
@@ -70,23 +70,13 @@ public class LogRepositoryTest {
         em.flush();
         em.clear();
 
-        LogEntity findDifferentLogEntity = em.find(LogEntity.class, differentLogEntity.getId());
-
         //when
         List<LogEntity> actualLogList = logRepository.findByUserIdAndTraceId(userId, traceId);
 
         //then
-        for (int i = 0; i < 3; i++) {
-            LogEntity actualLogEntity = actualLogList.get(i);
-            LogEntity expectedLogEntity = expectedLogEntityList.get(i);
-
-            assertThat(actualLogEntity.getId()).isEqualTo(expectedLogEntity.getId());
-            assertThat(actualLogEntity.getUserId()).isEqualTo(expectedLogEntity.getUserId());
-            assertThat(actualLogEntity.getTraceId()).isEqualTo(expectedLogEntity.getTraceId());
-            assertThat(actualLogEntity.getAppName()).isEqualTo(expectedLogEntity.getAppName());
-            assertThat(actualLogEntity.getResultMsg()).isEqualTo(expectedLogEntity.getResultMsg());
-        }
-        assertThat(actualLogList).doesNotContain(findDifferentLogEntity);
+        assertThat(actualLogList.size()).isEqualTo(expectedLogEntityList.size());
+        assertThat(actualLogList).containsAll(expectedLogEntityList);
+        assertThat(actualLogList).doesNotContain(differentLogEntity);
     }
 
 }
