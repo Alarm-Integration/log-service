@@ -1,8 +1,7 @@
 package com.gabia.logservice.domain.log;
 
-import com.gabia.logservice.domain.log.LogEntity;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 @Transactional
-@SpringBootTest
+@DataJpaTest
 public class LogEntityTest {
-
 
     @PersistenceContext
     private EntityManager em;
