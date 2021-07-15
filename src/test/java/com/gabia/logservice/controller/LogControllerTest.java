@@ -3,29 +3,26 @@ package com.gabia.logservice.controller;
 import com.gabia.logservice.domain.log.LogEntity;
 import com.gabia.logservice.domain.log.LogRepository;
 import com.gabia.logservice.dto.AlarmResultResponse;
-import org.assertj.core.api.LocalDateTimeAssert;
-import org.hamcrest.Matchers;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @SpringBootTest
 public class LogControllerTest {
@@ -42,7 +39,7 @@ public class LogControllerTest {
     private LocalDateTime createdAt = LocalDateTime.now().withNano(0);
 
     @BeforeEach
-    void before() {
+    void beforeEach() {
         logRepository.deleteAll();
 
         LogEntity defaultLogEntity = LogEntity.builder()
@@ -55,6 +52,22 @@ public class LogControllerTest {
 
         logRepository.save(defaultLogEntity);
     }
+    @AfterEach
+    void afterEach() {
+        logRepository.deleteAll();
+
+        LogEntity defaultLogEntity = LogEntity.builder()
+                .userId(userId)
+                .traceId(traceId)
+                .appName(appName)
+                .resultMsg(resultMsg)
+                .createdAt(createdAt)
+                .build();
+
+        logRepository.save(defaultLogEntity);
+    }
+
+
 
 
     @Test

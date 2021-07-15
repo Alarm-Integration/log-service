@@ -2,14 +2,12 @@ package com.gabia.logservice.domain;
 
 import com.gabia.logservice.domain.log.LogEntity;
 import com.gabia.logservice.domain.log.LogRepository;
-import org.apache.commons.lang.text.StrBuilder;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,9 +19,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@SpringBootTest
+@ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @Transactional
+@SpringBootTest
 public class LogRepositoryTest {
 
     @Autowired
