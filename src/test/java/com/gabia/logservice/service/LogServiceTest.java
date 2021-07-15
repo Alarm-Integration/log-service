@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 @Transactional
-@SpringBootTest(classes = LogServiceApplication.class)
+@SpringBootTest
 public class LogServiceTest {
 
     @Autowired

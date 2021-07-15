@@ -1,4 +1,4 @@
-package com.gabia.logservice.domain;
+package com.gabia.logservice.domain.log;
 
 import com.gabia.logservice.domain.log.LogEntity;
 import org.junit.jupiter.api.Test;

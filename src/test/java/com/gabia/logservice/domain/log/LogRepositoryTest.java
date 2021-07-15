@@ -1,4 +1,4 @@
-package com.gabia.logservice.domain;
+package com.gabia.logservice.domain.log;
 
 import com.gabia.logservice.LogServiceApplication;
 import com.gabia.logservice.domain.log.LogEntity;
@@ -23,7 +23,7 @@ import java.util.List;
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @Transactional
-@SpringBootTest(classes = LogServiceApplication.class)
+@SpringBootTest
 public class LogRepositoryTest {
 
     @Autowired
