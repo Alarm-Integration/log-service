@@ -1,6 +1,8 @@
 package com.gabia.logservice.service;
 
 import com.gabia.logservice.domain.log.LogEntity;
+import com.gabia.logservice.domain.log.LogRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,8 +25,16 @@ public class LogServiceTest {
     @Autowired
     private LogService logService;
 
+    @Autowired
+    private LogRepository logRepository;
+
     @PersistenceContext
     private EntityManager em;
+
+    @BeforeEach
+    void beforeEach() {
+        logRepository.deleteAll();
+    }
 
     @Test
     void test_getAlarmResultList() {

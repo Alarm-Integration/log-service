@@ -3,7 +3,6 @@ package com.gabia.logservice.controller;
 import com.gabia.logservice.domain.log.LogEntity;
 import com.gabia.logservice.domain.log.LogRepository;
 import com.gabia.logservice.dto.AlarmResultResponse;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,23 +51,6 @@ public class LogControllerTest {
 
         logRepository.save(defaultLogEntity);
     }
-    @AfterEach
-    void afterEach() {
-        logRepository.deleteAll();
-
-        LogEntity defaultLogEntity = LogEntity.builder()
-                .userId(userId)
-                .traceId(traceId)
-                .appName(appName)
-                .resultMsg(resultMsg)
-                .createdAt(createdAt)
-                .build();
-
-        logRepository.save(defaultLogEntity);
-    }
-
-
-
 
     @Test
     void test_getAlarmResultLogs_empty_success() throws Exception {
