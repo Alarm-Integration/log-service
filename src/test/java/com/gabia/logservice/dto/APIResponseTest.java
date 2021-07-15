@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class APIResponseTest {
     @Test
-    public void 정적_팩토리_메서드_테스트_성공() {
+    public void test_getter_method() {
         //given
         String message = "response message";
         Object result = new Object();
