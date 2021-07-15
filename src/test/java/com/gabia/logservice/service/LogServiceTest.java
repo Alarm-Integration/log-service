@@ -1,5 +1,6 @@
 package com.gabia.logservice.service;
 
+import com.gabia.logservice.LogServiceApplication;
 import com.gabia.logservice.domain.log.LogEntity;
 import com.gabia.logservice.domain.log.LogRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
 @Transactional
-@SpringBootTest
+@SpringBootTest(classes = LogServiceApplication.class)
 public class LogServiceTest {
 
     @Autowired
