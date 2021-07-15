@@ -23,8 +23,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@ActiveProfiles("test")
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 @SpringBootTest
 public class LogControllerTest {
 
@@ -170,3 +170,5 @@ public class LogControllerTest {
                 .andExpect(jsonPath("$.result.type_mismatched_header_name").value(typeMismatchedHeaderName));
     }
 }
+
+

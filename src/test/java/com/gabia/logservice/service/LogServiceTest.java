@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,16 +20,17 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ActiveProfiles("test")
 @Transactional
-@DataJpaTest
+@ActiveProfiles("test")
+@SpringBootTest
 public class LogServiceTest {
+
+    @Autowired
+    private LogRepository logRepository;
 
     @Autowired
     private LogService logService;
 
-    @Autowired
-    private LogRepository logRepository;
 
     @PersistenceContext
     private EntityManager em;
