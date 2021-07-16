@@ -4,28 +4,16 @@ server:
 eureka:
   instance:
     prefer-ip-address: true
-    ip-address: localhost
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://139.150.75.239:8761/eureka, http://139.150.75.240:8761/eureka
-
+    ip-address: "${HOST_IP}"
 
 spring:
-  application:
-    name: log-service
-  datasource:
-    url: jdbc:mysql://139.150.75.240:3306/fluentd-test?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
-    username: root
-    password: 1234
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-      format_sql: true
+    application:
+      name: log-service
+    jpa:
+      database: mysql
+      database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+      generate-ddl: true
+      show-sql: true
 
 management:
   endpoints:
