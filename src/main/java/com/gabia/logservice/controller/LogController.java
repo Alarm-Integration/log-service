@@ -4,6 +4,8 @@ import com.gabia.logservice.domain.log.LogEntity;
 import com.gabia.logservice.dto.APIResponse;
 import com.gabia.logservice.dto.AlarmResultResponse;
 import com.gabia.logservice.service.LogService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -12,14 +14,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Api(value = "LogController")
 @Validated
 @RequiredArgsConstructor
+@RequestMapping("/log-service")
 @RestController
 public class LogController {
 
     private final LogService logService;
 
-    @GetMapping("/logs")
+    @ApiOperation(value = "알림 발송 결과 조회", notes = "알림 발송 결과 조회")
+    @GetMapping("/alarmResults")
     public ResponseEntity<APIResponse> GetAlarmResultLogs (
             @RequestHeader(value = "user_id") Long userId,
             @RequestHeader(value = "trace_id") String traceId

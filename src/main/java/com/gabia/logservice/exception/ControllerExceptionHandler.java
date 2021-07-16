@@ -25,6 +25,7 @@ public class ControllerExceptionHandler {
         errorBody.put("required_header_name", e.getHeaderName());
         errorBody.put("error_message", e.getMessage());
 
+        log.error(e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(APIResponse.withMessage("MissingRequestHeaderException", errorBody));
@@ -35,6 +36,7 @@ public class ControllerExceptionHandler {
         errorBody.put("type_mismatched_header_name", e.getName());
         errorBody.put("error_message", e.getLocalizedMessage());
 
+        log.error(e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(APIResponse.withMessage("MethodArgumentTypeMismatch", errorBody));
