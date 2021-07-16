@@ -6,9 +6,7 @@ import com.gabia.logservice.dto.AlarmResultResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -61,7 +59,7 @@ public class LogControllerTest {
         String expectedSuccessMessage = "알림 발송 결과 조회 완료";
 
         // when
-        ResultActions result = mockMvc.perform(get("/logs")
+        ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
                 .header("user_id", differentUserId)
                 .header("trace_id", traceId)
                 .accept(APPLICATION_JSON));
@@ -87,7 +85,7 @@ public class LogControllerTest {
                 .build()));
 
         // when
-        ResultActions result = mockMvc.perform(get("/logs")
+        ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
                 .header("user_id", userId)
                 .header("trace_id", traceId)
                 .accept(APPLICATION_JSON));
@@ -110,7 +108,7 @@ public class LogControllerTest {
         String expectedErrorMessage = String.format("Required request header '%s' for method parameter type Long is not present", missingHeaderName);
 
         // when
-        ResultActions result = mockMvc.perform(get("/logs")
+        ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
 //                .header("user_id", userId)
                 .header("trace_id", traceId)
                 .accept(APPLICATION_JSON));
@@ -133,7 +131,7 @@ public class LogControllerTest {
         String expectedErrorMessage = String.format("Required request header '%s' for method parameter type String is not present", missingHeaderName);
 
         // when
-        ResultActions result = mockMvc.perform(get("/logs")
+        ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
 //                .header("trace_id", traceId)
                 .header("user_id", userId)
                 .accept(APPLICATION_JSON));
@@ -157,7 +155,7 @@ public class LogControllerTest {
         String expectedErrorMessage = String.format("Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \"%s\"", typeMismatchedUserId);
 
         // when
-        ResultActions result = mockMvc.perform(get("/logs")
+        ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
                 .header(typeMismatchedHeaderName, typeMismatchedUserId)
                 .header("trace_id", traceId)
                 .accept(APPLICATION_JSON));
