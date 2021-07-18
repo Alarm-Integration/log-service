@@ -26,8 +26,8 @@ public class LogController {
     @ApiOperation(value = "알림 발송 결과 조회", notes = "알림 발송 결과 조회")
     @GetMapping("/alarmResults")
     public ResponseEntity<APIResponse> GetAlarmResultLogs (
-            @RequestHeader(value = "user_id") Long userId,
-            @RequestHeader(value = "trace_id") String traceId
+            @RequestHeader(value = "user-id") Long userId,
+            @RequestHeader(value = "trace-id") String traceId
     ) {
 
         List<LogEntity> logEntityList = logService.getAlarmResultList(userId, traceId);

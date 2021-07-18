@@ -60,8 +60,8 @@ public class LogControllerTest {
 
         // when
         ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
-                .header("user_id", differentUserId)
-                .header("trace_id", traceId)
+                .header("user-id", differentUserId)
+                .header("trace-id", traceId)
                 .accept(APPLICATION_JSON));
 
         // then
@@ -86,8 +86,8 @@ public class LogControllerTest {
 
         // when
         ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
-                .header("user_id", userId)
-                .header("trace_id", traceId)
+                .header("user-id", userId)
+                .header("trace-id", traceId)
                 .accept(APPLICATION_JSON));
 
         // then
@@ -104,13 +104,13 @@ public class LogControllerTest {
     void test_getAlarmResultLogs_without_user_id_header_fail() throws Exception {
         // given
         String expectedFailMessage = "MissingRequestHeaderException";
-        String missingHeaderName = "user_id";
+        String missingHeaderName = "user-id";
         String expectedErrorMessage = String.format("Required request header '%s' for method parameter type Long is not present", missingHeaderName);
 
         // when
         ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
 //                .header("user_id", userId)
-                .header("trace_id", traceId)
+                .header("trace-id", traceId)
                 .accept(APPLICATION_JSON));
 
         System.out.println(jsonPath("$.result"));
@@ -127,13 +127,13 @@ public class LogControllerTest {
     void test_getAlarmResultLogs_without_trace_id_header_fail() throws Exception {
         // given
         String expectedFailMessage = "MissingRequestHeaderException";
-        String missingHeaderName = "trace_id";
+        String missingHeaderName = "trace-id";
         String expectedErrorMessage = String.format("Required request header '%s' for method parameter type String is not present", missingHeaderName);
 
         // when
         ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
-//                .header("trace_id", traceId)
-                .header("user_id", userId)
+//                .header("trace-id", traceId)
+                .header("user-id", userId)
                 .accept(APPLICATION_JSON));
 
         System.out.println(jsonPath("$.result"));
@@ -150,14 +150,14 @@ public class LogControllerTest {
     void test_getAlarmResultLogs_with_type_mismatch_header_fail() throws Exception {
         // given
         String expectedFailMessage = "MethodArgumentTypeMismatch";
-        String typeMismatchedHeaderName = "user_id";
+        String typeMismatchedHeaderName = "user-id";
         String typeMismatchedUserId = "typeMismatchedUserId";
         String expectedErrorMessage = String.format("Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \"%s\"", typeMismatchedUserId);
 
         // when
         ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
                 .header(typeMismatchedHeaderName, typeMismatchedUserId)
-                .header("trace_id", traceId)
+                .header("trace-id", traceId)
                 .accept(APPLICATION_JSON));
 
         // then
