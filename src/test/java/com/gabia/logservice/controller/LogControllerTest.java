@@ -61,7 +61,7 @@ public class LogControllerTest {
         // when
         ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
                 .header("user-id", differentUserId)
-                .header("trace-id", traceId)
+                .header("alarm-result-id", traceId)
                 .accept(APPLICATION_JSON));
 
         // then
@@ -87,7 +87,7 @@ public class LogControllerTest {
         // when
         ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
                 .header("user-id", userId)
-                .header("trace-id", traceId)
+                .header("alarm-result-id", traceId)
                 .accept(APPLICATION_JSON));
 
         // then
@@ -110,7 +110,7 @@ public class LogControllerTest {
         // when
         ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
 //                .header("user_id", userId)
-                .header("trace-id", traceId)
+                .header("alarm-result-id", traceId)
                 .accept(APPLICATION_JSON));
 
         System.out.println(jsonPath("$.result"));
@@ -127,12 +127,12 @@ public class LogControllerTest {
     void test_getAlarmResultLogs_without_trace_id_header_fail() throws Exception {
         // given
         String expectedFailMessage = "MissingRequestHeaderException";
-        String missingHeaderName = "trace-id";
+        String missingHeaderName = "alarm-result-id";
         String expectedErrorMessage = String.format("Required request header '%s' for method parameter type String is not present", missingHeaderName);
 
         // when
         ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
-//                .header("trace-id", traceId)
+//                .header("alarm-result-id", traceId)
                 .header("user-id", userId)
                 .accept(APPLICATION_JSON));
 
@@ -157,7 +157,7 @@ public class LogControllerTest {
         // when
         ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
                 .header(typeMismatchedHeaderName, typeMismatchedUserId)
-                .header("trace-id", traceId)
+                .header("alarm-result-id", traceId)
                 .accept(APPLICATION_JSON));
 
         // then

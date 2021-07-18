@@ -27,10 +27,10 @@ public class LogController {
     @GetMapping("/alarmResults")
     public ResponseEntity<APIResponse> GetAlarmResultLogs (
             @RequestHeader(value = "user-id") Long userId,
-            @RequestHeader(value = "trace-id") String traceId
+            @RequestHeader(value = "alarm-result-id") String alarmResultId
     ) {
 
-        List<LogEntity> logEntityList = logService.getAlarmResultList(userId, traceId);
+        List<LogEntity> logEntityList = logService.getAlarmResultList(userId, alarmResultId);
 
         List<AlarmResultResponse> alarmResultResponseList = new ArrayList<>();
         logEntityList.forEach((logEntity) -> {
