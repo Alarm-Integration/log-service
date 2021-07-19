@@ -25,7 +25,7 @@ public class LogController {
     private final LogService logService;
 
     @ApiOperation(value = "알림 발송 결과 조회", notes = "알림 발송 결과 조회")
-    @GetMapping("/alarmResults")
+    @GetMapping("/alarm-results")
     public ResponseEntity<APIResponse> GetAlarmResultLogs (
             @RequestHeader(value = "user-id") Long userId,
             @RequestHeader(value = "alarm-result-id") String alarmResultId
@@ -43,7 +43,7 @@ public class LogController {
     }
 
     @ApiOperation(value = "사용자의 알림 발송 조회 아이디 목록 조회", notes = "알림 발송 조회 아이디 목록 조회")
-    @GetMapping("/alarmResultIds")
+    @GetMapping("/alarm-result-ids")
     public ResponseEntity<APIResponse> GetAlarmResultIdList(@RequestHeader(value = "user-id") Long userId) {
 
         List<AlarmResultIdResponse> alarmResultResponseList = logService.getAlarmResultIdList(userId);

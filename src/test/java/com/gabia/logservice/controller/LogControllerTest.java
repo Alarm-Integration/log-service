@@ -60,7 +60,7 @@ public class LogControllerTest {
         String expectedSuccessMessage = "알림 발송 결과 조회 완료";
 
         // when
-        ResultActions result = mockMvc.perform(get("/log-service/alarmResultIds")
+        ResultActions result = mockMvc.perform(get("/log-service/alarm-result-ids")
                 .header("user-id", differentUserId)
                 .accept(APPLICATION_JSON));
 
@@ -79,7 +79,7 @@ public class LogControllerTest {
         expectedAlarmResultIdResponseList.add(new AlarmResultIdResponse(traceId, createdAt));
 
         // when
-        ResultActions result = mockMvc.perform(get("/log-service/alarmResultIds")
+        ResultActions result = mockMvc.perform(get("/log-service/alarm-result-ids")
                 .header("user-id", userId)
                 .accept(APPLICATION_JSON));
 
@@ -100,7 +100,7 @@ public class LogControllerTest {
         String expectedErrorMessage = String.format("Required request header '%s' for method parameter type Long is not present", missingHeaderName);
 
         // when
-        ResultActions result = mockMvc.perform(get("/log-service/alarmResultIds")
+        ResultActions result = mockMvc.perform(get("/log-service/alarm-result-ids")
 //                .header("user_id", userId)
                 .accept(APPLICATION_JSON));
 
@@ -123,7 +123,7 @@ public class LogControllerTest {
         String expectedErrorMessage = String.format("Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \"%s\"", typeMismatchedUserId);
 
         // when
-        ResultActions result = mockMvc.perform(get("/log-service/alarmResultIds")
+        ResultActions result = mockMvc.perform(get("/log-service/alarm-result-ids")
                 .header(typeMismatchedHeaderName, typeMismatchedUserId)
                 .accept(APPLICATION_JSON));
 
@@ -143,7 +143,7 @@ public class LogControllerTest {
         String expectedSuccessMessage = "알림 발송 결과 조회 완료";
 
         // when
-        ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
+        ResultActions result = mockMvc.perform(get("/log-service/alarm-results")
                 .header("user-id", differentUserId)
                 .header("alarm-result-id", traceId)
                 .accept(APPLICATION_JSON));
@@ -169,7 +169,7 @@ public class LogControllerTest {
                 .build()));
 
         // when
-        ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
+        ResultActions result = mockMvc.perform(get("/log-service/alarm-results")
                 .header("user-id", userId)
                 .header("alarm-result-id", traceId)
                 .accept(APPLICATION_JSON));
@@ -192,7 +192,7 @@ public class LogControllerTest {
         String expectedErrorMessage = String.format("Required request header '%s' for method parameter type Long is not present", missingHeaderName);
 
         // when
-        ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
+        ResultActions result = mockMvc.perform(get("/log-service/alarm-results")
 //                .header("user_id", userId)
                 .header("alarm-result-id", traceId)
                 .accept(APPLICATION_JSON));
@@ -215,7 +215,7 @@ public class LogControllerTest {
         String expectedErrorMessage = String.format("Required request header '%s' for method parameter type String is not present", missingHeaderName);
 
         // when
-        ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
+        ResultActions result = mockMvc.perform(get("/log-service/alarm-results")
 //                .header("alarm-result-id", traceId)
                 .header("user-id", userId)
                 .accept(APPLICATION_JSON));
@@ -239,7 +239,7 @@ public class LogControllerTest {
         String expectedErrorMessage = String.format("Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \"%s\"", typeMismatchedUserId);
 
         // when
-        ResultActions result = mockMvc.perform(get("/log-service/alarmResults")
+        ResultActions result = mockMvc.perform(get("/log-service/alarm-results")
                 .header(typeMismatchedHeaderName, typeMismatchedUserId)
                 .header("alarm-result-id", traceId)
                 .accept(APPLICATION_JSON));
