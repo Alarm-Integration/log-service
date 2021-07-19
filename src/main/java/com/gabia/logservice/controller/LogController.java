@@ -2,8 +2,8 @@ package com.gabia.logservice.controller;
 
 import com.gabia.logservice.domain.log.LogEntity;
 import com.gabia.logservice.dto.APIResponse;
-import com.gabia.logservice.dto.AlarmResultIdResponse;
 import com.gabia.logservice.dto.AlarmResultResponse;
+import com.gabia.logservice.dto.TraceIdResponse;
 import com.gabia.logservice.service.LogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,10 +28,10 @@ public class LogController {
     @GetMapping("/alarm-results")
     public ResponseEntity<APIResponse> GetAlarmResultLogs (
             @RequestHeader(value = "user-id") Long userId,
-            @RequestHeader(value = "alarm-result-id") String alarmResultId
+            @RequestParam(value = "trace-id") String traceId
     ) {
 
-        List<LogEntity> logEntityList = logService.getAlarmResultList(userId, alarmResultId);
+        List<LogEntity> logEntityList = logService.getAlarmResultList(userId, traceId);
 
         List<AlarmResultResponse> alarmResultResponseList = new ArrayList<>();
         logEntityList.forEach((logEntity) -> {
@@ -43,11 +43,11 @@ public class LogController {
     }
 
     @ApiOperation(value = "사용자의 알림 발송 조회 아이디 목록 조회", notes = "알림 발송 조회 아이디 목록 조회")
-    @GetMapping("/alarm-result-ids")
+    @GetMapping("/alarm-requests")
     public ResponseEntity<APIResponse> GetAlarmResultIdList(@RequestHeader(value = "user-id") Long userId) {
 
-        List<AlarmResultIdResponse> alarmResultResponseList = logService.getAlarmResultIdList(userId);
-        return ResponseEntity.ok(APIResponse.withMessage("알림 발송 결과 조회 완료", alarmResultResponseList));
+        List<TraceIdResponse> alarmResultResponseList = logService.getAlarmResultIdList(userId);
+        return ResponseEntity.ok(APIResponse.withMessage("알림 발송 결과 조회용 아이디 결과 조회 완료", alarmResultResponseList));
     }
 
 }

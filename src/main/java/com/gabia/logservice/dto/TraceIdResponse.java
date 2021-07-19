@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 
 @Getter
 @RequiredArgsConstructor
-public class AlarmResultIdResponse {
-    @JsonProperty("alarm_result_id")
-    private final String alarmResultId;
+public class TraceIdResponse {
+    @JsonProperty("traceId")
+    private final String traceId;
 
-    @JsonProperty("created_at")
+    @JsonProperty("createdAt")
     private final LocalDateTime createdAt;
 }

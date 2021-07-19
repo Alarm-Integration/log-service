@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 
 @Getter
 public class AlarmResultResponse {
-    @JsonProperty("app_name")
+    @JsonProperty("appName")
     private String appName;
 
-    @JsonProperty("result_msg")
+    @JsonProperty("resultMsg")
     private String resultMsg;
 
-    @JsonProperty("created_at")
+    @JsonProperty("createdAt")
     private LocalDateTime createdAt;
 
     public AlarmResultResponse(LogEntity logEntity) {

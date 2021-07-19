@@ -1,15 +1,12 @@
 package com.gabia.logservice.service;
 
-import com.gabia.logservice.LogServiceApplication;
 import com.gabia.logservice.domain.log.LogEntity;
 import com.gabia.logservice.domain.log.LogRepository;
-import com.gabia.logservice.dto.AlarmResultIdResponse;
+import com.gabia.logservice.dto.TraceIdResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,7 +83,7 @@ public class LogServiceTest {
         int sendCount = 2;
         Long userId = 1L;
         String traceId = "test_trace_id";
-        List<AlarmResultIdResponse> expectedAlarmResultIdList = new ArrayList<>();
+        List<TraceIdResponse> expectedAlarmResultIdList = new ArrayList<>();
 
         for (int i = 0; i < sendCount; i++) {
             for (int j = 0; j < 3; j++) {
@@ -98,7 +95,7 @@ public class LogServiceTest {
                         .createdAt(LocalDateTime.now())
                         .build();
                 em.persist(logEntity);
-                expectedAlarmResultIdList.add(new AlarmResultIdResponse(logEntity.getTraceId(), logEntity.getCreatedAt()));
+                expectedAlarmResultIdList.add(new TraceIdResponse(logEntity.getTraceId(), logEntity.getCreatedAt()));
             }
         }
 
@@ -109,19 +106,19 @@ public class LogServiceTest {
                 .appName("test_app_name")
                 .createdAt(LocalDateTime.now())
                 .build();
-        AlarmResultIdResponse differentAlarmResultId = new AlarmResultIdResponse(differentLogEntity.getTraceId(), differentLogEntity.getCreatedAt());
+        TraceIdResponse differentAlarmResultId = new TraceIdResponse(differentLogEntity.getTraceId(), differentLogEntity.getCreatedAt());
         em.persist(differentLogEntity);
         em.flush();
         em.clear();
 
         //when
-        List<AlarmResultIdResponse> actualAlarmResultIdList = logService.getAlarmResultIdList(userId);
+        List<TraceIdResponse> actualAlarmResultIdList = logService.getAlarmResultIdList(userId);
 
         //then
         assertThat(actualAlarmResultIdList.size()).isEqualTo(sendCount);
         for (int i = 0; i < sendCount; i++) {
             for (int j = 0; j < 3; j++) {
-                assertThat(actualAlarmResultIdList.get(i).getAlarmResultId()).isEqualTo(expectedAlarmResultIdList.get(j + i * 3).getAlarmResultId());
+                assertThat(actualAlarmResultIdList.get(i).getTraceId()).isEqualTo(expectedAlarmResultIdList.get(j + i * 3).getTraceId());
             }
         }
         assertThat(actualAlarmResultIdList).doesNotContain(differentAlarmResultId);
