@@ -7,11 +7,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface LogRepository extends JpaRepository<LogEntity, Long> {
+public interface AlarmLogRepository extends JpaRepository<AlarmLogEntity, Long> {
 
-    List<LogEntity> findByUserIdAndTraceId(Long userId, String traceId);
+    List<AlarmLogEntity> findByUserIdAndTraceId(Long userId, String traceId);
 
-    @Query("SELECT new com.gabia.logservice.dto.TraceIdResponse(l.traceId, MIN(l.createdAt)) FROM logs l WHERE l.userId = :userId GROUP BY l.traceId")
+    @Query("SELECT new com.gabia.logservice.dto.TraceIdResponse(l.traceId, MIN(l.createdAt)) FROM alarm_logs l WHERE l.userId = :userId GROUP BY l.traceId")
     List<TraceIdResponse> findAllByUserId(@Param("userId") Long userId);
 
 }

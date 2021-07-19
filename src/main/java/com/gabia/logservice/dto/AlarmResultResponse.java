@@ -1,26 +1,28 @@
 package com.gabia.logservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gabia.logservice.domain.log.AlarmLogEntity;
+import com.gabia.logservice.domain.log.AlarmMessageEntity;
 import com.gabia.logservice.domain.log.LogEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 public class AlarmResultResponse {
-    @JsonProperty("appName")
-    private String appName;
+    @JsonProperty("alarmMessage")
+    private AlarmMessageResponse alarmMessageResponse;
 
-    @JsonProperty("resultMsg")
-    private String resultMsg;
+    @JsonProperty("alarmLogCount")
+    private Long alarmLogResponseCount;
 
-    @JsonProperty("createdAt")
-    private LocalDateTime createdAt;
+    @JsonProperty("alarmLogList")
+    private List<AlarmLogResponse> alarmLogResponseList;
 
-    public AlarmResultResponse(LogEntity logEntity) {
-        this.appName = logEntity.getAppName();
+    public AlarmResultResponse(AlarmLogEntity alarmLogEntity, AlarmMessageEntity alarmMessageEntity) {
+        this.alarmMessageResponse = alarmMessageEntity;
         this.resultMsg = logEntity.getResultMsg();
-        this.createdAt = logEntity.getCreatedAt();
     }
 }

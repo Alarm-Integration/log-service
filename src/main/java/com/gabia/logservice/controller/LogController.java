@@ -1,5 +1,7 @@
 package com.gabia.logservice.controller;
 
+import com.gabia.logservice.domain.log.AlarmLogEntity;
+import com.gabia.logservice.domain.log.AlarmMessageEntity;
 import com.gabia.logservice.domain.log.LogEntity;
 import com.gabia.logservice.dto.APIResponse;
 import com.gabia.logservice.dto.AlarmResultResponse;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Api(value = "LogController")
 @Validated
@@ -31,7 +34,8 @@ public class LogController {
             @RequestParam(value = "trace-id") String traceId
     ) {
 
-        List<LogEntity> logEntityList = logService.getAlarmResultList(userId, traceId);
+        List<AlarmLogEntity> alarmLogEntityList = logService.getAlarmLogList(userId, traceId);
+        Optional<AlarmMessageEntity> alarmMessageEntity = logService.getAlarmMessage(userId, traceId);
 
         List<AlarmResultResponse> alarmResultResponseList = new ArrayList<>();
         logEntityList.forEach((logEntity) -> {
@@ -46,7 +50,7 @@ public class LogController {
     @GetMapping("/alarm-requests")
     public ResponseEntity<APIResponse> GetAlarmResultIdList(@RequestHeader(value = "user-id") Long userId) {
 
-        List<TraceIdResponse> alarmResultResponseList = logService.getAlarmResultIdList(userId);
+        List<TraceIdResponse> alarmResultResponseList = logService.getAlarmTraceIdList(userId);
         return ResponseEntity.ok(APIResponse.withMessage("알림 발송 결과 조회용 아이디 결과 조회 완료", alarmResultResponseList));
     }
 
