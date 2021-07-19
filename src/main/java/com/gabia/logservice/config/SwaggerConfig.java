@@ -14,31 +14,27 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-    private String version;
-    private String title;
+
+    private final String VERSION = "V1";
+    private final String TITLE = "Log Service API " + VERSION;
 
     @Bean
     public Docket apiV1() {
-        version = "V1";
-        title = "Log Service API " + version;
 
         return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo(title, version))
+                .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.gabia"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
-    private ApiInfo apiInfo(String title, String version) {
+    private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title(title)
+                .title(TITLE)
                 .description("Swagger로 생성한 Log Service API 문서")
-                .version(version)
-                .contact(new Contact(
-                        "Gabia",
-                        "www.gabia.com",
-                        "gabia@gabia.com"
-                )).build();
+                .version(VERSION)
+                .contact(new Contact("Gabia", "www.gabia.com", "gabia@gabia.com"))
+                .build();
     }
 }
