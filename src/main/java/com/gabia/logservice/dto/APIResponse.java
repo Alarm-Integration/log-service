@@ -1,9 +1,11 @@
 package com.gabia.logservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class APIResponse {
     private final String message;
     private final Object result;

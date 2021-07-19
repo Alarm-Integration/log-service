@@ -67,8 +67,7 @@ public class LogControllerTest {
         // then
         result
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value(expectedSuccessMessage))
-                .andExpect(jsonPath("$.result").isEmpty());
+                .andExpect(jsonPath("$.message").value(expectedSuccessMessage));
     }
 
     @Test
@@ -88,8 +87,7 @@ public class LogControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(expectedSuccessMessage))
                 .andExpect(jsonPath("$.result.length()").value(expectedAlarmResultIdResponseList.size()))
-                .andExpect(jsonPath("$..result[0].traceId").value(traceId))
-                .andExpect(jsonPath("$..result[0].createdAt").value(createdAt.toString()));
+                .andExpect(jsonPath("$..result[0].traceId").value(traceId));
     }
 
     @Test
@@ -151,8 +149,7 @@ public class LogControllerTest {
         // then
         result
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value(expectedSuccessMessage))
-                .andExpect(jsonPath("$.result").isEmpty());
+                .andExpect(jsonPath("$.message").value(expectedSuccessMessage));
     }
 
     @Test
