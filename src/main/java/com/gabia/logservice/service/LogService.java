@@ -2,6 +2,7 @@ package com.gabia.logservice.service;
 
 import com.gabia.logservice.domain.log.LogEntity;
 import com.gabia.logservice.domain.log.LogRepository;
+import com.gabia.logservice.dto.AlarmResultIdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,11 @@ public class LogService {
     @Transactional(readOnly = true)
     public List<LogEntity> getAlarmResultList(Long userId, String traceId) {
         return logRepository.findByUserIdAndTraceId(userId, traceId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<AlarmResultIdResponse> getAlarmResultIdList(Long userId) {
+        return logRepository.findAllByUserId(userId);
     }
 
 }

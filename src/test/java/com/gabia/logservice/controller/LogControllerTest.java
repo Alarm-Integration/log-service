@@ -2,6 +2,7 @@ package com.gabia.logservice.controller;
 
 import com.gabia.logservice.domain.log.LogEntity;
 import com.gabia.logservice.domain.log.LogRepository;
+import com.gabia.logservice.dto.AlarmResultIdResponse;
 import com.gabia.logservice.dto.AlarmResultResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,6 +52,89 @@ public class LogControllerTest {
 
         logRepository.save(defaultLogEntity);
     }
+
+    @Test
+    void test_getAlarmResultIds_empty_success() throws Exception {
+        // given
+        Long differentUserId = 2L;
+        String expectedSuccessMessage = "알림 발송 결과 조회 완료";
+
+        // when
+        ResultActions result = mockMvc.perform(get("/log-service/alarmResultIds")
+                .header("user-id", differentUserId)
+                .accept(APPLICATION_JSON));
+
+        // then
+        result
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value(expectedSuccessMessage))
+                .andExpect(jsonPath("$.result").isEmpty());
+    }
+
+    @Test
+    void test_getAlarmResultIds_success() throws Exception {
+        // given
+        String expectedSuccessMessage = "알림 발송 결과 조회 완료";
+        List<AlarmResultIdResponse> expectedAlarmResultIdResponseList = new ArrayList<>();
+        expectedAlarmResultIdResponseList.add(new AlarmResultIdResponse(traceId, createdAt));
+
+        // when
+        ResultActions result = mockMvc.perform(get("/log-service/alarmResultIds")
+                .header("user-id", userId)
+                .accept(APPLICATION_JSON));
+
+        // then
+        result
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value(expectedSuccessMessage))
+                .andExpect(jsonPath("$.result.length()").value(expectedAlarmResultIdResponseList.size()))
+                .andExpect(jsonPath("$..result[0].alarm_result_id").value(traceId))
+                .andExpect(jsonPath("$..result[0].created_at").value(createdAt.toString()));
+    }
+
+    @Test
+    void test_getAlarmResultIds_without_user_id_header_fail() throws Exception {
+        // given
+        String expectedFailMessage = "MissingRequestHeaderException";
+        String missingHeaderName = "user-id";
+        String expectedErrorMessage = String.format("Required request header '%s' for method parameter type Long is not present", missingHeaderName);
+
+        // when
+        ResultActions result = mockMvc.perform(get("/log-service/alarmResultIds")
+//                .header("user_id", userId)
+                .accept(APPLICATION_JSON));
+
+        System.out.println(jsonPath("$.result"));
+
+        // then
+        result
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(expectedFailMessage))
+                .andExpect(jsonPath("$.result.error_message").value(expectedErrorMessage))
+                .andExpect(jsonPath("$.result.required_header_name").value(missingHeaderName));
+    }
+
+    @Test
+    void test_getAlarmResultIds_with_type_mismatch_header_fail() throws Exception {
+        // given
+        String expectedFailMessage = "MethodArgumentTypeMismatch";
+        String typeMismatchedHeaderName = "user-id";
+        String typeMismatchedUserId = "typeMismatchedUserId";
+        String expectedErrorMessage = String.format("Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: \"%s\"", typeMismatchedUserId);
+
+        // when
+        ResultActions result = mockMvc.perform(get("/log-service/alarmResultIds")
+                .header(typeMismatchedHeaderName, typeMismatchedUserId)
+                .accept(APPLICATION_JSON));
+
+        // then
+        result
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(expectedFailMessage))
+                .andExpect(jsonPath("$.result.error_message").value(expectedErrorMessage))
+                .andExpect(jsonPath("$.result.type_mismatched_header_name").value(typeMismatchedHeaderName));
+    }
+
 
     @Test
     void test_getAlarmResultLogs_empty_success() throws Exception {

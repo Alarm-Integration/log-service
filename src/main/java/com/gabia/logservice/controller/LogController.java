@@ -2,6 +2,7 @@ package com.gabia.logservice.controller;
 
 import com.gabia.logservice.domain.log.LogEntity;
 import com.gabia.logservice.dto.APIResponse;
+import com.gabia.logservice.dto.AlarmResultIdResponse;
 import com.gabia.logservice.dto.AlarmResultResponse;
 import com.gabia.logservice.service.LogService;
 import io.swagger.annotations.Api;
@@ -38,6 +39,14 @@ public class LogController {
             alarmResultResponseList.add(response);
         });
 
+        return ResponseEntity.ok(APIResponse.withMessage("알림 발송 결과 조회 완료", alarmResultResponseList));
+    }
+
+    @ApiOperation(value = "사용자의 알림 발송 조회 아이디 목록 조회", notes = "알림 발송 조회 아이디 목록 조회")
+    @GetMapping("/alarmResultIds")
+    public ResponseEntity<APIResponse> GetAlarmResultIdList(@RequestHeader(value = "user-id") Long userId) {
+
+        List<AlarmResultIdResponse> alarmResultResponseList = logService.getAlarmResultIdList(userId);
         return ResponseEntity.ok(APIResponse.withMessage("알림 발송 결과 조회 완료", alarmResultResponseList));
     }
 
