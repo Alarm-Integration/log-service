@@ -1,8 +1,5 @@
 package com.gabia.logservice.domain.log;
 
-import com.gabia.logservice.LogServiceApplication;
-import com.gabia.logservice.domain.log.LogEntity;
-import com.gabia.logservice.domain.log.LogRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,57 +23,57 @@ import java.util.List;
 @DataJpaTest
 public class LogRepositoryTest {
 
-    @Autowired
-    private LogRepository logRepository;
+//    @Autowired
+//    private LogRepository logRepository;
+//
+//    @PersistenceContext
+//    private EntityManager em;
+//
+//    @BeforeEach
+//    void beforeEach() {
+//        logRepository.deleteAll();
+//    }
 
-    @PersistenceContext
-    private EntityManager em;
-
-    @BeforeEach
-    void beforeEach() {
-        logRepository.deleteAll();
-    }
-
-    @Test
-    void test_findByUserIdAndTraceId() {
-        //given
-        Long userId = 1L;
-        String traceId = "test_trace_id";
-        String appName = "test_app_name";
-        String resultMsg = "test_result_msg";
-        LocalDateTime createdAt = LocalDateTime.now();
-
-        List<LogEntity> expectedLogEntityList = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            LogEntity logEntity = LogEntity.builder()
-                    .userId(userId)
-                    .traceId(traceId)
-                    .resultMsg(resultMsg)
-                    .appName(appName)
-                    .createdAt(createdAt)
-                    .build();
-            em.persist(logEntity);
-            expectedLogEntityList.add(logEntity);
-        }
-
-        LogEntity differentLogEntity = LogEntity.builder()
-                .userId(2L)  // not same with above userId
-                .traceId(traceId)  // same with above traceId
-                .resultMsg(resultMsg)
-                .appName(appName)
-                .createdAt(createdAt)
-                .build();
-        em.persist(differentLogEntity);
-        em.flush();
-        em.clear();
-
-        //when
-        List<LogEntity> actualLogList = logRepository.findByUserIdAndTraceId(userId, traceId);
-
-        //then
-        assertThat(actualLogList.size()).isEqualTo(expectedLogEntityList.size());
-        assertThat(actualLogList).containsAll(expectedLogEntityList);
-        assertThat(actualLogList).doesNotContain(differentLogEntity);
-    }
+//    @Test
+//    void test_findByUserIdAndTraceId() {
+//        //given
+//        Long userId = 1L;
+//        String traceId = "test_trace_id";
+//        String appName = "test_app_name";
+//        String resultMsg = "test_result_msg";
+//        LocalDateTime createdAt = LocalDateTime.now();
+//
+//        List<LogEntity> expectedLogEntityList = new ArrayList<>();
+//        for (int i = 0; i < 3; i++) {
+//            LogEntity logEntity = LogEntity.builder()
+//                    .userId(userId)
+//                    .traceId(traceId)
+//                    .resultMsg(resultMsg)
+//                    .appName(appName)
+//                    .createdAt(createdAt)
+//                    .build();
+//            em.persist(logEntity);
+//            expectedLogEntityList.add(logEntity);
+//        }
+//
+//        LogEntity differentLogEntity = LogEntity.builder()
+//                .userId(2L)  // not same with above userId
+//                .traceId(traceId)  // same with above traceId
+//                .resultMsg(resultMsg)
+//                .appName(appName)
+//                .createdAt(createdAt)
+//                .build();
+//        em.persist(differentLogEntity);
+//        em.flush();
+//        em.clear();
+//
+//        //when
+//        List<LogEntity> actualLogList = logRepository.findByUserIdAndTraceId(userId, traceId);
+//
+//        //then
+//        assertThat(actualLogList.size()).isEqualTo(expectedLogEntityList.size());
+//        assertThat(actualLogList).containsAll(expectedLogEntityList);
+//        assertThat(actualLogList).doesNotContain(differentLogEntity);
+//    }
 
 }

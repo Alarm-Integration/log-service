@@ -1,8 +1,8 @@
 package com.gabia.logservice.service;
 
-import com.gabia.logservice.domain.log.LogEntity;
-import com.gabia.logservice.domain.log.LogRepository;
-import com.gabia.logservice.dto.TraceIdResponse;
+import com.gabia.logservice.domain.log.AlarmRequestEntity;
+import com.gabia.logservice.domain.log.AlarmRequestRepository;
+import com.gabia.logservice.domain.log.AlarmResultEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,104 +24,95 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LogServiceTest {
 
     @Autowired
-    private LogRepository logRepository;
+    private AlarmRequestRepository alarmRequestRepository;
 
     @Autowired
     private LogService logService;
-
 
     @PersistenceContext
     private EntityManager em;
 
     @BeforeEach
     void beforeEach() {
-        logRepository.deleteAll();
+        alarmRequestRepository.deleteAll();
     }
 
     @Test
-    void test_getAlarmResultList() {
+    void test_getAlarmRequest() {
         //given
         Long userId = 1L;
-        String traceId = "test_trace_id";
-        List<LogEntity> expectedLogEntityList = new ArrayList<>();
+        String requestId = "test_request_id";
+        String title = "test_title";
+        String content = "test_content";
+        LocalDateTime createdAt = LocalDateTime.now();
+        AlarmRequestEntity expectedAlarmRequestEntity = AlarmRequestEntity
+                .builder()
+                .userId(userId)
+                .requestId(requestId)
+                .title(title)
+                .content(content)
+                .createdAt(createdAt)
+                .build();
 
-        for (int i = 0; i < 3; i++) {
-            LogEntity logEntity = LogEntity.builder()
+        em.persist(expectedAlarmRequestEntity);
+        em.flush();
+        em.clear();
+
+        //when
+        Optional<AlarmRequestEntity> actualAlarmRequestEntity = logService.getAlarmRequest(userId, requestId);
+        Optional<AlarmRequestEntity> emptyAlarmRequestEntity = logService.getAlarmRequest(2L, requestId);
+
+        //then
+        assertThat(actualAlarmRequestEntity).isNotEmpty();
+        actualAlarmRequestEntity.ifPresent(presentAlarmRequestEntity -> {
+            assertThat(presentAlarmRequestEntity.getUserId()).isEqualTo(expectedAlarmRequestEntity.getUserId());
+            assertThat(presentAlarmRequestEntity.getRequestId()).isEqualTo(expectedAlarmRequestEntity.getRequestId());
+            assertThat(presentAlarmRequestEntity.getTitle()).isEqualTo(expectedAlarmRequestEntity.getTitle());
+            assertThat(presentAlarmRequestEntity.getContent()).isEqualTo(expectedAlarmRequestEntity.getContent());
+        });
+        assertThat(emptyAlarmRequestEntity).isEmpty();
+    }
+
+    @Test
+    void test_getAlarmRequestList() {
+        //given
+        Long userId = 1L;
+        String requestId = "test_request_id";
+        String title = "test_title";
+        String content = "test_content";
+        LocalDateTime createdAt = LocalDateTime.now();
+        long expectedRequestResponseListSize = 3L;
+
+        for (int i = 0; i < expectedRequestResponseListSize; i++) {
+            AlarmRequestEntity alarmRequestEntity = AlarmRequestEntity
+                    .builder()
                     .userId(userId)
-                    .traceId(traceId)
-                    .resultMsg("test_result_msg" + i)
-                    .appName("test_app_name" + i)
-                    .createdAt(LocalDateTime.now())
+                    .requestId(requestId + i)
+                    .title(title + i)
+                    .content(content + i)
+                    .createdAt(createdAt)
                     .build();
-            em.persist(logEntity);
-            expectedLogEntityList.add(logEntity);
+            em.persist(alarmRequestEntity);
         }
 
-        LogEntity differentLogEntity = LogEntity.builder()
-                .userId(2L)  // not same with above userId
-                .traceId(traceId)  // same with above traceId
-                .resultMsg("test_result_msg")
-                .appName("test_app_name")
+        AlarmRequestEntity differentAlarmRequestEntity = AlarmRequestEntity
+                .builder()
+                .userId(2L)  // different from above userId
+                .requestId(requestId)
+                .title(title)
+                .content(content)
                 .createdAt(LocalDateTime.now())
                 .build();
-        em.persist(differentLogEntity);
+        em.persist(differentAlarmRequestEntity);
+
         em.flush();
         em.clear();
 
-        //when
-        List<LogEntity> actualLogEntityList = logService.getAlarmResultList(userId, traceId);
+        // when
+        List<AlarmRequestEntity> alarmRequestEntityList = logService.getAlarmRequestList(userId);
 
-        //then
-        assertThat(actualLogEntityList.size()).isEqualTo(expectedLogEntityList.size());
-        assertThat(actualLogEntityList).containsAll(expectedLogEntityList);
-        assertThat(actualLogEntityList).doesNotContain(differentLogEntity);
+        // then
+        assertThat(alarmRequestEntityList.size()).isEqualTo(expectedRequestResponseListSize);
+        assertThat(alarmRequestEntityList).doesNotContain(differentAlarmRequestEntity);
     }
-
-    @Test
-    void test_getAlarmResultIdList() {
-        //given
-        int sendCount = 2;
-        Long userId = 1L;
-        String traceId = "test_trace_id";
-        List<TraceIdResponse> expectedAlarmResultIdList = new ArrayList<>();
-
-        for (int i = 0; i < sendCount; i++) {
-            for (int j = 0; j < 3; j++) {
-                LogEntity logEntity = LogEntity.builder()
-                        .userId(userId)
-                        .traceId(traceId + i)
-                        .resultMsg("test_result_msg")
-                        .appName("test_app_name")
-                        .createdAt(LocalDateTime.now())
-                        .build();
-                em.persist(logEntity);
-                expectedAlarmResultIdList.add(new TraceIdResponse(logEntity.getTraceId(), logEntity.getCreatedAt()));
-            }
-        }
-
-        LogEntity differentLogEntity = LogEntity.builder()
-                .userId(2L)  // not same with above userId
-                .traceId(traceId)
-                .resultMsg("test_result_msg")
-                .appName("test_app_name")
-                .createdAt(LocalDateTime.now())
-                .build();
-        TraceIdResponse differentAlarmResultId = new TraceIdResponse(differentLogEntity.getTraceId(), differentLogEntity.getCreatedAt());
-        em.persist(differentLogEntity);
-        em.flush();
-        em.clear();
-
-        //when
-        List<TraceIdResponse> actualAlarmResultIdList = logService.getAlarmResultIdList(userId);
-
-        //then
-        assertThat(actualAlarmResultIdList.size()).isEqualTo(sendCount);
-        for (int i = 0; i < sendCount; i++) {
-            for (int j = 0; j < 3; j++) {
-                assertThat(actualAlarmResultIdList.get(i).getTraceId()).isEqualTo(expectedAlarmResultIdList.get(j + i * 3).getTraceId());
-            }
-        }
-        assertThat(actualAlarmResultIdList).doesNotContain(differentAlarmResultId);
-    }
-
 }

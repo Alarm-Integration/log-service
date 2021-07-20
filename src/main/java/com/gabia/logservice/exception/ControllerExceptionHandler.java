@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +20,14 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class ControllerExceptionHandler {
+
+    @ExceptionHandler
+    public ResponseEntity<APIResponse> entityNotFoundExceptionHandler(EntityNotFoundException e){
+        log.error(e.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(APIResponse.withMessage("MissingRequestHeaderException", e.getMessage()));
+    }
 
     @ExceptionHandler
     public ResponseEntity<APIResponse> missingRequestHeaderExceptionHandler(MissingRequestHeaderException e){

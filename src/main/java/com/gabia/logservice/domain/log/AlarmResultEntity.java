@@ -12,19 +12,17 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity(name = "alarm_logs")
-public class AlarmLogEntity {
+@Entity(name = "alarm_results")
+public class AlarmResultEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(nullable = false, name = "user_id")
-    private Long userId;
-
-    @Column(nullable = false, name = "trace_id")
-    private String traceId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id")
+    private AlarmRequestEntity alarmRequestEntity;
 
     @Column(nullable = false, name = "app_name")
     private String appName;
@@ -35,22 +33,17 @@ public class AlarmLogEntity {
     @Column(nullable = false, name = "is_success")
     private boolean isSuccess;
 
-    @Column(nullable = false, name = "receiver")
-    private String receiver;
-
-    @Column(nullable = false, name = "created_at")
-    private LocalDateTime createdAt;
-
-
+    @Column(nullable = false, name = "address")
+    private String address;
 
     @Builder
-    public AlarmLogEntity(Long id, Long userId, String traceId, String appName, String logMessage, LocalDateTime createdAt) {
+    public AlarmResultEntity(Long id, String appName, String logMessage, boolean isSuccess, String address, AlarmRequestEntity alarmRequestEntity) {
         this.id = id;
-        this.userId = userId;
-        this.traceId = traceId;
         this.appName = appName;
         this.logMessage = logMessage;
-        this.createdAt = createdAt;
+        this.isSuccess = isSuccess;
+        this.address = address;
+        this.alarmRequestEntity = alarmRequestEntity;
     }
 
 }

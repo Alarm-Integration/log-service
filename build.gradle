@@ -86,7 +86,7 @@ jacocoTestCoverageVerification {
                 minimum = 0.7
             }
 
-            excludes = ['com.gabia.logservice.LogServiceApplication']
+            excludes = ['com.gabia.logservice.*']
         }
     }
 }
