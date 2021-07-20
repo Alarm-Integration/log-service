@@ -56,7 +56,7 @@ public class LogController {
 
         List<AlarmRequestEntity> alarmRequestEntityList = logService.getAlarmRequestList(userId);
         for (AlarmRequestEntity alarmRequestEntity : alarmRequestEntityList) {
-            alarmRequestResponseList.add(new AlarmRequestResponse(alarmRequestEntity.getRequestId(), alarmRequestEntity.getCreatedAt()));
+            alarmRequestResponseList.add(new AlarmRequestResponse(alarmRequestEntity));
         }
         return ResponseEntity.ok(APIResponse.withMessage("알림 발송 결과 조회용 아이디 결과 조회 완료", alarmRequestResponseList));
     }

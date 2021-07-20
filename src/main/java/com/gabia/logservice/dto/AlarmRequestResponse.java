@@ -1,6 +1,7 @@
 package com.gabia.logservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gabia.logservice.domain.log.AlarmRequestEntity;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,13 +17,21 @@ public class AlarmRequestResponse {
     @EqualsAndHashCode.Include
     private final String requestId;
 
+    @JsonProperty("title")
+    private final String title;
+
+    @JsonProperty("content")
+    private final String content;
+
     @JsonProperty("createdAt")
     private final LocalDateTime createdAt;
 
     @Builder
-    public AlarmRequestResponse(String requestId, LocalDateTime createdAt) {
-        this.requestId = requestId;
-        this.createdAt = createdAt;
+    public AlarmRequestResponse(AlarmRequestEntity alarmRequestEntity) {
+        this.requestId = alarmRequestEntity.getRequestId();
+        this.title = alarmRequestEntity.getTitle();
+        this.content = alarmRequestEntity.getContent();
+        this.createdAt = alarmRequestEntity.getCreatedAt();
     }
 
 }
