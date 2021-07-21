@@ -12,13 +12,16 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Entity(name = "alarm_requests")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AlarmRequestEntity {
 
     @Id
     @Column(nullable = false, name = "request_id")
+    @EqualsAndHashCode.Include
     private String requestId;
 
     @Column(nullable = false, name = "user_id")
+    @EqualsAndHashCode.Include
     private Long userId;
 
     @Column(nullable = false, name = "title")

@@ -26,7 +26,7 @@ public class ControllerExceptionHandler {
         log.error(e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(APIResponse.withMessage("MissingRequestHeaderException", e.getMessage()));
+                .body(APIResponse.withMessage("EntityNotFoundException", e.getMessage()));
     }
 
     @ExceptionHandler
@@ -51,18 +51,6 @@ public class ControllerExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(APIResponse.withMessage("MethodArgumentTypeMismatchException", errorBody));
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<APIResponse> MissingServletRequestParameterExceptionHandler(MissingServletRequestParameterException e){
-        Map<String, String> errorBody = new HashMap<>();
-        errorBody.put("missingServletRequestParameter", e.getParameterName());
-        errorBody.put("errorMessage", e.getLocalizedMessage());
-
-        log.error(e.getMessage());
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(APIResponse.withMessage("MissingServletRequestParameterException", errorBody));
     }
 
 }

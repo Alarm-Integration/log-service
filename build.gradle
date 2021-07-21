@@ -57,6 +57,10 @@ dependencyManagement {
     }
 }
 
+jacoco {
+    toolVersion = "0.8.7"
+}
+
 test {
     useJUnitPlatform()
     finalizedBy 'jacocoTestReport'
@@ -87,7 +91,7 @@ jacocoTestCoverageVerification {
                 minimum = 0.7
             }
 
-            excludes = ['com.gabia.logservice.*']
+            excludes = ['com.gabia.logservice.LogServiceApplication']
         }
     }
 }
