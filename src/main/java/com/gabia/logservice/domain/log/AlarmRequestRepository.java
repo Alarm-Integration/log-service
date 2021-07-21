@@ -12,11 +12,6 @@ public interface AlarmRequestRepository extends JpaRepository<AlarmRequestEntity
 
     Optional<AlarmRequestEntity> findByUserIdAndRequestId(Long userId, String requestId);
 
-//    @Query("SELECT new com.gabia.logservice.dto.AlarmRequestResponse(l.alarmRequestEntity.requestId, MIN(l.createdAt)) " +
-//            "FROM alarm_results l " +
-//            "WHERE l.userId = :userId " +
-//            "GROUP BY l.alarmRequestEntity.requestId"
-//    )
     @Query("SELECT ar FROM alarm_requests AS ar WHERE ar.userId = :userId GROUP BY ar.requestId")
     List<AlarmRequestEntity> findAllByUserIdAndGroupByRequestId(@Param("userId") Long userId);
 
