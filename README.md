@@ -4,34 +4,49 @@
 
 ### APIs
 
-1. GET /log-service/alarmResults
+1. GET /log-service/alarm-requests/{request-id}/results
     - 알림 발송 결과 조회 api
     - request header
         - "user-id" : "1"
-        - "trace-id" : "989e7dc5-6150-4764-8a34-cd929631018e"
+    - request path variable      
+        - "request-id" : "989e7dc5-6150-4764-8a34-cd929631018e"
     - response
         1. 200 OK
              ```json
-             {
-               "message": "알림 발송 결과 조회 완료",
-               "result": [
-                   {
-                       "app_name": "sms",
-                       "result_msg": "문자 발송 성공",
-                       "created_at": "2021-07-19T09:16:03"
-                   },
-                   {
-                       "app_name": "slack",
-                       "result_msg": "슬랙 발송 성공",
-                       "created_at": "2021-07-19T09:16:03.456614"
-                   },
-                   {
-                       "app_name": "email",
-                       "result_msg": "메일 발송 성공",
-                       "created_at": "2021-07-19T09:16:03.576514"
-                   }
-               ]
-             }
+            {
+                "message": "알림 발송 결과 조회 완료",
+                "result": {
+                    "title": "::: 가용성 테스트 :::",
+                    "content": "hello-world",
+                    "resultCount": 3,
+                    "alarmResultList": [
+                        {
+                            "success": true,
+                            "appName": "email",
+                            "logMessage": "메일 발송 성공",
+                            "address": "kmk@gabia.com",
+                            "isSuccess": true,
+                        "createdAt": "2021-07-21T01:29:14"
+                        },
+                        {
+                            "success": true,
+                            "appName": "sms",
+                            "logMessage": "정상 접수(이통사로 접수 예정) ",
+                            "address": "01092988726",
+                            "isSuccess": true,
+                            "createdAt": "2021-07-21T01:29:14"
+                        },
+                        {
+                            "success": true,
+                            "appName": "slack",
+                            "logMessage": "슬랙 발송 성공",
+                            "address": "C023WJKCPUM",
+                            "isSuccess": true,
+                            "createdAt": "2021-07-21T01:29:14"
+                        }
+                    ]
+                }
+            }
              ```
         2. 400 BAD REQUEST - request header에 필수 key값이 빠졌을 때 (e.g. user-id이 빠졌을 때)
             ```json
@@ -53,7 +68,7 @@
                  }
              }
              ```
-2. GET /log-service/alarmResultIds
+2. GET /log-service/alarm-requests
     - 사용자의 알림 발송 조회 아이디 목록 조회 api
     - request header
         - "user-id" : "1"
@@ -61,18 +76,34 @@
         1. 200 OK
              ```json
              {
-               "message": "알림 발송 결과 조회 완료",
-               "result": [
-                  {
-                     "alarm_result_id": "2086bce1-3611-4d91-939f-e4cf525d1a8a",
-                     "created_at": "2021-07-18T20:58:37.883275"
-                  },
-                  {
-                     "alarm_result_id": "2bf101e9-3f7f-4a7b-8db1-4af86ec366b3",
-                     "created_at": "2021-07-18T16:50:38.460447"
-                  }
-               ]
-             }   
+                "message": "알림 발송 결과 조회용 아이디 결과 조회 완료",
+                "result": [
+                    {
+                        "requestId": "35fa4b67-9afd-44eb-a30b-12f84bd1803f",
+                        "title": "::: 가용성 테스트 :::",
+                        "content": "hello-world",
+                        "createdAt": "2021-07-21T01:28:51"
+                    },
+                    {
+                        "requestId": "47ac887e-1f7c-4bd4-bd3f-a891ca9c2f11",
+                        "title": "::: 가용성 테스트 :::",
+                        "content": "hello-world",
+                        "createdAt": "2021-07-21T01:29:00"
+                    },
+                    {
+                        "requestId": "541e42a5-9ba9-4c46-b4ca-b15137b0498d",
+                        "title": "::: 가용성 테스트 :::",
+                        "content": "hello-world",
+                        "createdAt": "2021-07-21T01:28:57"
+                    },
+                    {
+                        "requestId": "6efaddf4-e423-498e-8a21-91ff50c7db3f",
+                        "title": "::: 정상 요청 :::",
+                        "content": "hello-world",
+                        "createdAt": "2021-07-21T01:24:32"
+                    }
+                ]
+             }
              ```
         2. 400 BAD REQUEST - request header에 필수 key값이 빠졌을 때 (e.g. user-id이 빠졌을 때)
             ```json
@@ -106,16 +137,14 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface LogRepository extends JpaRepository<LogEntity, Long> {
+public interface AlarmRequestRepository extends JpaRepository<AlarmRequestEntity, Long> {
 
-    // request header로 넘어온 user-id와 trace-id를 받아서 이를 동시에 충족하는 log테이블의 rows 반환
-    // SELECT * FROM logs WHERE user_id = :userId AND trace_id = :traceId
-    List<LogEntity> findByUserIdAndTraceId(Long userId, String traceId);
+    // 사용자가 특정 알림 발송 요청에 대해서 조회
+    Optional<AlarmRequestEntity> findByUserIdAndRequestId(Long userId, String requestId);
 
-    // request header로 넘어온 user-id를 받아서 해당하는 중복되지않는 trace_id 리스트를 생성날짜와 함께 rows 반환
-    @Query("SELECT new com.gabia.logservice.dto.AlarmResultIdResponse(l.traceId, MIN(l.createdAt)) FROM logs l WHERE l.userId = :userId GROUP BY l.traceId")
-    List<AlarmResultIdResponse> findAllByUserId(@Param("userId") Long userId);
+    // 사용자가 알림 발송 요청한 목록 조회
+    @Query("SELECT ar FROM alarm_requests AS ar WHERE ar.userId = :userId GROUP BY ar.requestId")
+    List<AlarmRequestEntity> findAllByUserIdAndGroupByRequestId(@Param("userId") Long userId);
 
 }
-
 ```
